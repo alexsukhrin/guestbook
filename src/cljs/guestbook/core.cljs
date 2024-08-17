@@ -26,11 +26,10 @@
  (fn [db _]
    (:messages/list db [])))
 
-(defn send-message!
-  [fields errors]
+(defn send-message! [fields errors]
   (if-let [validation-errors (validate-message @fields)]
     (reset! errors validation-errors)
-    (POST "/message"
+    (POST "/api/message"
       {:format :json
        :headers
        {"Accept" "application/transit+json"
@@ -52,7 +51,7 @@
 
 (defn get-messages
   []
-  (GET "/messages"
+  (GET "/api/messages"
     {:headers {"Accept" "application/transit+json"}
      :handler #(rf/dispatch [:messages/set (:messages %)])}))
 
